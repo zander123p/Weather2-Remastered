@@ -1,0 +1,19 @@
+{
+    "result": {
+      "item": "weather2:wind_vane"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "W W",
+      "RWR",
+      "W W"
+    ],
+    "key": {
+      "W": {
+        "item": "weather2:weather_item"
+      },
+      "R": {
+        "item": "#REDSTONE"
+      }
+    }
+  }

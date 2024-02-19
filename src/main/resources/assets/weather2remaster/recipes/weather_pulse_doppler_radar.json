@@ -1,0 +1,28 @@
+{
+    "result": {
+      "item": "weather2:weather_forecast_3"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "AAA",
+      "BCB",
+      "DED"
+    ],
+    "key": {
+      "A": {
+        "item": "weather2:lcd_1"
+      },
+      "B": {
+        "item": "weather2:cpu_2"
+      },
+      "C": {
+        "item": "weather2:weather_forecast_2"
+      },
+      "D": {
+        "item": "#OBSIDIAN"
+      },
+      "E": {
+        "item": "weather2:antenna_2"
+      }
+    }
+  }

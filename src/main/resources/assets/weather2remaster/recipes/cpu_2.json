@@ -1,0 +1,22 @@
+{
+    "result": {
+      "item": "weather2:cpu_2"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "BCB",
+      "ABA"
+    ],
+    "key": {
+      "A": {
+        "item": "#OBSIDIAN"
+      },
+      "B": {
+        "item": "#DIAMOND"
+      },
+      "C": {
+        "item": "weather2:cpu_1"
+      }
+    }
+  }

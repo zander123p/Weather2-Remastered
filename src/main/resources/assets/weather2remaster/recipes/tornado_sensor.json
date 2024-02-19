@@ -1,0 +1,31 @@
+{
+    "result": {
+      "item": "weather2:tornado_sensor"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "CDE",
+      "AFA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "weather2:cpu_1"
+      },
+      "C": {
+        "item": "weather2:humidity_sensor"
+      },
+      "D": {
+        "item": "weather2:machine_case"
+      },
+      "E": {
+        "item": "weather2:temperature_sensor"
+      },
+      "F": {
+        "item": "weather2:antenna_1"
+      }
+    }
+  }

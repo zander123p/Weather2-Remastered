@@ -1,0 +1,17 @@
+{
+    "result": {
+      "item": "minecraft:sand",
+      "data": 0
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "AAA",
+      "A A",
+      "AAA"
+    ],
+    "key": {
+      "A": {
+        "item": "weather2:sand_layer"
+      }
+    }
+  }

@@ -1,0 +1,25 @@
+{
+    "result": {
+      "item": "weather2:handheld_thermometer"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      " A ",
+      "BCB",
+      "BDB"
+    ],
+    "key": {
+      "A": {
+        "item": "weather2:antenna_1"
+      },
+      "B": {
+        "item": "#IRON_INGOT"
+      },
+      "C": {
+        "item": "minecraft:blaze_rod"
+      },
+      "D": {
+        "item": "#REDSTONE"
+      }
+    }
+  }

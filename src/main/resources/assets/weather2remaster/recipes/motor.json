@@ -1,0 +1,22 @@
+{
+    "result": {
+      "item": "weather2:motor"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      " C ",
+      "ABA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "#REDSTONE"
+      },
+      "C": {
+        "item": "#GOLD_INGOT"
+      }
+    }
+  }

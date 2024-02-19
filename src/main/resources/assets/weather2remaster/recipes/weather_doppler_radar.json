@@ -1,0 +1,28 @@
+{
+    "result": {
+      "item": "weather2:weather_forecast_2"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "AAA",
+      "BCB",
+      "DED"
+    ],
+    "key": {
+      "A": {
+        "item": "weather2:lcd_1"
+      },
+      "B": {
+        "item": "weather2:cpu_1"
+      },
+      "C": {
+        "item": "weather2:weather_forecast"
+      },
+      "D": {
+        "item": "#IRON_INGOT"
+      },
+      "E": {
+        "item": "weather2:antenna_1"
+      }
+    }
+  }

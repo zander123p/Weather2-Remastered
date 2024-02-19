@@ -1,0 +1,19 @@
+{
+    "result": {
+      "item": "weather2:anemometer"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "W W",
+      "WRW",
+      "W W"
+    ],
+    "key": {
+      "W": {
+        "item": "weather2:weather_item"
+      },
+      "R": {
+        "item": "#REDSTONE"
+      }
+    }
+  }

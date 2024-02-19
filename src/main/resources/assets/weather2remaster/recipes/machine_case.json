@@ -1,0 +1,22 @@
+{
+    "result": {
+      "item": "weather2:machine_case"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "IGI",
+      "GBG",
+      "IGI"
+    ],
+    "key": {
+      "I": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "#GOLD_INGOT"
+      },
+      "G": {
+        "item": "#GLASS"
+      }
+    }
+  }

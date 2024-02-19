@@ -1,0 +1,25 @@
+{
+    "result": {
+      "item": "weather2:tornado_siren"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "CDC",
+      "ABA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "weather2:cpu_1"
+      },
+      "C": {
+        "item": "weather2:tornado_sensor"
+      },
+      "D": {
+        "item": "weather2:tornado_siren_manual"
+      }
+    }
+  }

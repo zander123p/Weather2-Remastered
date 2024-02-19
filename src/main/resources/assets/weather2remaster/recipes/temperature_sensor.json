@@ -1,0 +1,28 @@
+{
+    "result": {
+      "item": "weather2:temperature_sensor"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "CDC",
+      "AEA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "minecraft:blaze_rod"
+      },
+      "C": {
+        "item": "weather2:bulb"
+      },
+      "D": {
+        "item": "weather2:machine_case"
+      },
+      "E": {
+        "item": "#REDSTONE"
+      }
+    }
+  }

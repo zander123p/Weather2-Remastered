@@ -1,0 +1,86 @@
+[
+    {
+      "name": "DIAMOND",
+      "ingredient": {
+        "type": "forge:ore_dict",
+        "ore": "gemDiamond"
+      }
+    },
+    {
+      "name": "IRON_INGOT",
+      "ingredient": {
+        "type": "forge:ore_dict",
+        "ore": "ingotIron"
+      }
+    },
+    {
+      "name": "GLASS",
+      "ingredient": {
+        "type": "forge:ore_dict",
+        "ore": "blockGlass"
+      }
+    },
+    {
+      "name": "STONE",
+      "ingredient": {
+        "type": "forge:ore_dict",
+        "ore": "stone"
+      }
+    },
+    {
+      "name": "REDSTONE",
+      "ingredient": {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone"
+      }
+    },
+    {
+      "name": "GOLD_INGOT",
+      "ingredient": {
+        "type": "forge:ore_dict",
+        "ore": "ingotGold"
+      }
+    },
+    {
+        "name": "OBSIDIAN",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "obsidian"
+        }
+    },
+    {
+        "name": "WOOL",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "wool"
+        }
+    },
+    {
+        "name": "REDSTONE_BLOCK",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "blockRedstone"
+        }
+    },
+    {
+        "name": "GLASS_PANE",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "paneGlass"
+        }
+    },
+    {
+        "name": "SAND",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "sand"
+        }
+    },
+    {
+        "name": "GLOWSTONE",
+        "ingredient": {
+            "type": "forge:ore_dict",
+            "ore": "dustGlowstone"
+        }
+    }
+  ]

@@ -1,0 +1,25 @@
+{
+    "result": {
+      "item": "weather2:cpu_0"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "CDC",
+      "ABA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "#REDSTONE"
+      },
+      "C": {
+        "item": "#GLASS_PANE"
+      },
+      "D": {
+        "item": "#GOLD_INGOT"
+      }
+    }
+  }

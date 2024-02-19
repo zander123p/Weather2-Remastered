@@ -1,0 +1,22 @@
+{
+    "result": {
+      "item": "weather2:cpu_1"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "BCB",
+      "ABA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "#GOLD_INGOT"
+      },
+      "C": {
+        "item": "weather2:cpu_0"
+      }
+    }
+  }

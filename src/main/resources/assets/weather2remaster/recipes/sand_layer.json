@@ -1,0 +1,20 @@
+{
+    "result": {
+      "item": "weather2:sand_layer",
+      "count": 64
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "BBB",
+      "BAB",
+      "BBB"
+    ],
+    "key": {
+      "A": {
+        "item": "weather2:weather_item"
+      },
+      "B": {
+        "item": "#SAND"
+      }
+    }
+  }

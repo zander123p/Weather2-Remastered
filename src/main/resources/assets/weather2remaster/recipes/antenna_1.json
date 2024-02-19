@@ -1,0 +1,25 @@
+{
+    "result": {
+      "item": "weather2:antenna_1"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "CDC",
+      "ABA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "#REDSTONE"
+      },
+      "C": {
+        "item": "#DIAMOND"
+      },
+      "D": {
+        "item": "weather2:antenna_0"
+      }
+    }
+  }

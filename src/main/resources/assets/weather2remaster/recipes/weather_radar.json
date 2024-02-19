@@ -1,0 +1,28 @@
+{
+    "result": {
+      "item": "weather2:weather_forecast"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "CDC",
+      "AEA"
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "weather2:lcd_1"
+      },
+      "C": {
+        "item": "weather2:antenna_0"
+      },
+      "D": {
+        "item": "weather2:machine_case"
+      },
+      "E": {
+        "item": "weather2:cpu_0"
+      }
+    }
+  }

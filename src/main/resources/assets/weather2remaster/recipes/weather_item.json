@@ -1,0 +1,22 @@
+{
+    "result": {
+      "item": "weather2:weather_item"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "IOI",
+      "IDI",
+      " O "
+    ],
+    "key": {
+      "I": {
+        "item": "#IRON_INGOT"
+      },
+      "D": {
+        "item": "#DIAMOND"
+      },
+      "O": {
+        "item": "#OBSIDIAN"
+      }
+    }
+  }

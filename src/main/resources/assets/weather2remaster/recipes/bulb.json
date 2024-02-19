@@ -1,0 +1,16 @@
+{
+    "result": {
+      "item": "weather2:bulb"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "A A",
+      "A A",
+      "AAA"
+    ],
+    "key": {
+      "A": {
+        "item": "#GLASS_PANE"
+      }
+    }
+  }

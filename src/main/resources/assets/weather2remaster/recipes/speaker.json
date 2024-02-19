@@ -1,0 +1,22 @@
+{
+    "result": {
+      "item": "weather2:speaker"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "ACA",
+      " B "
+    ],
+    "key": {
+      "A": {
+        "item": "#WOOL"
+      },
+      "B": {
+        "item": "#IRON_INGOT"
+      },
+      "C": {
+        "item": "#REDSTONE"
+      }
+    }
+  }

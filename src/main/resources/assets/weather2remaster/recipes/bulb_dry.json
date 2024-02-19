@@ -1,0 +1,22 @@
+{
+    "result": {
+      "item": "weather2:bulb_dry"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      " A ",
+      " B ",
+      " C "
+    ],
+    "key": {
+      "A": {
+        "item": "#IRON_INGOT"
+      },
+      "B": {
+        "item": "#SAND"
+      },
+      "C": {
+        "item": "weather2:bulb"
+      }
+    }
+  }

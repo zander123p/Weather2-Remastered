@@ -1,0 +1,20 @@
+{
+    "result": {
+      "item": "weather2:pocket_sand",
+      "count": 8
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "SSS",
+      "SWS",
+      "SSS"
+    ],
+    "key": {
+      "W": {
+        "item": "weather2:weather_item"
+      },
+      "S": {
+        "item": "weather2:sand_layer"
+      }
+    }
+  }

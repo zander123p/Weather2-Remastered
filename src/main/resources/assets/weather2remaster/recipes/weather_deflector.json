@@ -1,0 +1,28 @@
+{
+    "result": {
+      "item": "weather2:weather_deflector"
+    },
+    "type": "forge:ore_shaped",
+    "pattern": [
+      "ABA",
+      "CDC",
+      "CEC"
+    ],
+    "key": {
+      "A": {
+        "item": "weather2:antenna_2"
+      },
+      "B": {
+        "item": "weather2:cpu_2"
+      },
+      "C": {
+        "item": "#IRON_INGOT"
+      },
+      "D": {
+        "item": "weather2:machine_case"
+      },
+      "E": {
+        "item": "weather2:weather_item"
+      }
+    }
+  }
