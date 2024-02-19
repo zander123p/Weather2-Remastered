@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -18,6 +19,7 @@ import net.mrbt0907.weather2.api.WeatherAPI;
 import net.mrbt0907.weather2.api.weather.WeatherEnum.Stage;
 import net.mrbt0907.weather2.config.ConfigStorm;
 import net.mrbt0907.weather2.config.EZConfigParser;
+import net.mrbt0907.weather2.network.packets.PacketFrontObject;
 import net.mrbt0907.weather2.network.packets.PacketRefresh;
 import net.mrbt0907.weather2.network.packets.PacketVolcanoObject;
 import net.mrbt0907.weather2.network.packets.PacketWeatherObject;
@@ -74,7 +76,7 @@ public class CommandWeather2 extends CommandBase
 					case "config":
 						return getListOfStringsMatchingLastWord(args, new String[] {"refresh"});
 					case "create":
-						return getListOfStringsMatchingLastWord(args, new String[] {"random", "clouds", "rainstorm", "thunderstorm", "supercell", "tropicaldisturbance", "tropicaldepression" , "tropicalstorm", "sandstorm", "ef#", "f#", "c#"});
+						return getListOfStringsMatchingLastWord(args, new String[] {"random", "clouds", "rainstorm", "thunderstorm", "supercell", "tropicaldisturbance", "tropicaldepression" , "tropicalstorm", "sandstorm", "front", "ef#", "f#", "c#"});
 					case "kill":
 						return getListOfStringsMatchingLastWord(args, new String[] {"all", "particles"});
 					case "test":
@@ -195,7 +197,7 @@ public class CommandWeather2 extends CommandBase
 					if (size > 1)
 					{
 						int stage = -1;
-						boolean isRaining = false, isSandstorm = false, isCyclone = false , isRandom = false;
+						boolean isRaining = false, isSandstorm = false, isCyclone = false , isRandom = false , isFront = false;
 						String type = args[1].toLowerCase(); 
 						
 						switch (type)
@@ -236,6 +238,10 @@ public class CommandWeather2 extends CommandBase
 								break;
 							case "sandstorm":
 								isSandstorm = true;
+								stage = Stage.NORMAL.getStage();
+								break;
+							case "front":
+								isFront = true;
 								stage = Stage.NORMAL.getStage();
 								break;
 							default:
@@ -283,6 +289,10 @@ public class CommandWeather2 extends CommandBase
 									say(sender, "create.sandstorm.fail.b");
 								else
 									say(sender, "create.sandstorm.success", Math.round(pos.x), Math.round(pos.z));
+							} else if (isFront) {
+								WeatherManagerServer wm = ServerTickHandler.dimensionSystems.get(world.provider.getDimension());
+								PacketFrontObject.create(world.provider.getDimension(), wm.createNaturalFront(world.provider.getDimension(), (EntityPlayer)sender.getCommandSenderEntity()));
+								say(sender, "create.front.success", Math.round(pos.x), Math.round(pos.z));
 							}
 							else
 							{

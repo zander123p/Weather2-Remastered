@@ -259,7 +259,8 @@ public class FrontObject implements IWeatherDetectable
 					storm.pos = new Vec3(target.posX + Maths.random(-ConfigSimulation.max_storm_spawning_distance, ConfigSimulation.max_storm_spawning_distance), storm.getLayerHeight(), target.posZ + Maths.random(-ConfigSimulation.max_storm_spawning_distance, ConfigSimulation.max_storm_spawning_distance));
 			}
 			else
-				storm.pos = new Vec3(pos.posX + Maths.random(-size, size)/2, storm.getLayerHeight(), pos.posZ + Maths.random(-size, size)/2);
+				//TODO: Make the storms follow the angle of the front GRRRRR
+				storm.pos = new Vec3((pos.posX + Maths.random(-size, size)*1.5f), storm.getLayerHeight(), ((pos.posZ + Maths.random(-size, size)/3)));
 			
 			if (layer == 0 && Maths.chance(ConfigStorm.storm_spawn_chance * 0.01D))
 				storm.initRealStorm();
@@ -295,6 +296,10 @@ public class FrontObject implements IWeatherDetectable
 	public void removeWeatherObject(UUID uuid)
 	{
 		WeatherObject system = systems.get(uuid);
+		if (system == null) {
+			Weather2.warn("The front tried to do an oopsie OwO, better call Brandon UwU : " + uuid);
+			return;
+		}
 		system.reset();
 		manager.removeWeatherObject(uuid);
 		

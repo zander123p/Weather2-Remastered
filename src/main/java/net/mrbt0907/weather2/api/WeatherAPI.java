@@ -15,6 +15,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.mrbt0907.configex.ConfigManager;
 import net.mrbt0907.weather2.Weather2;
 import net.mrbt0907.weather2.api.event.EventRegisterGrabLists;
 import net.mrbt0907.weather2.api.event.EventRegisterParticleRenderer;
@@ -269,6 +270,14 @@ public class WeatherAPI
     	entityList.addAll(list);
     	
     	Weather2.debug("Grab Rules have been updated:\n- Grab List = " + WeatherAPI.getGrabList().size() + " Entry(s)\n- Replace List = " + WeatherAPI.getReplaceList().size() + " Entry(s)\n- Wind Resistance List = " + WeatherAPI.getWRList().size() + " Entry(s)\n- Blacklisted Entity List = " + WeatherAPI.getEntityGrabList().size() + " Entry(s)");
+	}
+	
+	public static void addGrabRule(String block, int windSpeed) {
+		ConfigList cfg = new ConfigList(ConfigGrab.wind_resistance_entries);
+		
+		cfg.add(block, windSpeed);
+		
+		ConfigManager.save();
 	}
 	
 	private static ConfigList processGrabList(Set<ResourceLocation> entries, ConfigList cfg, boolean partialMatches, int type)

@@ -36,6 +36,8 @@ public class NormalStormRenderer extends AbstractWeatherRenderer
 	/**List of particles that make up the clouds above*/
 	@SideOnly(Side.CLIENT)
 	public List<EntityRotFX> listParticlesCloud,
+	
+	listParticlesCloud2,
 	/**List of funnel particles that a tornado makes*/
 	listParticlesFunnel,
 	/**List of mesocyclone particles that any supercell generates*/
@@ -55,6 +57,7 @@ public class NormalStormRenderer extends AbstractWeatherRenderer
 		listParticlesRain = new ArrayList<EntityRotFX>();
 		listParticlesFunnel = new ArrayList<EntityRotFX>();
 		listParticlesMeso = new ArrayList<EntityRotFX>();
+		listParticlesCloud2 = new ArrayList<EntityRotFX>();
 	}
 
 	@Override
@@ -188,6 +191,46 @@ public class NormalStormRenderer extends AbstractWeatherRenderer
 								particle.setScale(1250.0F * sizeCloudMult);
 								listParticlesCloud.add(particle);
 							}
+						}
+					}
+				}
+			}
+		}
+		
+		if (manager.getWorld().getTotalWorldTime() % (delay + ConfigParticle.cloud_particle_delay) == 0) {
+			for (int i = 0; i < loopSize && shouldSpawn(0); i++)
+			{
+				if (listParticlesCloud2.size() < (storm.size + extraSpawning) / 1F)
+				{
+					
+					double spawnRad = storm.size * 0.8D;
+					Vec3 tryPos = new Vec3(storm.pos.posX + (rand.nextDouble()*spawnRad) - (rand.nextDouble()*spawnRad), storm.getLayerHeight() - 70 + (rand.nextDouble() * 40.0F) + (storm.stage >= Stage.RAIN.getStage() ? 30.0F : 60.0D), storm.pos.posZ + (rand.nextDouble()*spawnRad) - (rand.nextDouble()*spawnRad));
+					if (tryPos.distanceSq(playerAdjPos) < maxRenderDistance) {
+						if (storm.pos.distanceSq(tryPos) > 200.0D || storm.stormType == 0)
+						if (storm.getAvoidAngleIfTerrainAtOrAheadOfPosition(storm.getAngle(), tryPos) == 0) {
+							ExtendedEntityRotFX particle;
+							if (WeatherUtil.isAprilFoolsDay()) {
+								particle = spawnParticle(tryPos.posX, tryPos.posY, tryPos.posZ, 0, ParticleRegistry.chicken);
+								if (particle == null) break;
+								particle.setColor(1F, 1F, 1F);
+							}
+							else
+							{
+								float finalBright = Math.min(0.8F, 0.6F + (rand.nextFloat() * 0.2F)) + (storm.stage >= Stage.RAIN.getStage() ? -0.3F : 0.0F);
+								particle = spawnParticle(tryPos.posX, tryPos.posY, tryPos.posZ, 0, (storm.stage <= Stage.RAIN.getStage() ? net.mrbt0907.weather2.registry.ParticleRegistry.cloud256_light : net.mrbt0907.weather2.registry.ParticleRegistry.cloud256));
+								if (particle == null) break;
+									particle.setColor(finalBright, finalBright, finalBright);
+								
+								if (storm.isSevere())
+									if (storm.isFirenado)
+									{
+											particle.setParticleTexture(net.mrbt0907.weather2.registry.ParticleRegistry.cloud256_fire);
+											particle.setColor(1F, 1F, 1F);
+									}									
+							}
+							particle.rotationPitch = Maths.random(70.0F, 110.0F);
+							particle.setScale(1250.0F * sizeCloudMult);
+							listParticlesCloud2.add(particle);
 						}
 					}
 				}
@@ -342,8 +385,8 @@ public class NormalStormRenderer extends AbstractWeatherRenderer
 			{
 				if (listParticlesMeso.size() < (storm.size + extraSpawning) / 1F)
 				{		
-					double stormRad = storm.size * 1.2D;
-					Vec3 tryPos = new Vec3(storm.pos.posX + (rand.nextDouble()*stormRad) - (rand.nextDouble()*stormRad), storm.getLayerHeight() + (rand.nextDouble() * 40.0F), storm.pos.posZ + (rand.nextDouble()*stormRad) - (rand.nextDouble()*stormRad));
+					double stormRad = storm.size * 0.3D;
+					Vec3 tryPos = new Vec3(storm.pos.posX + (rand.nextDouble()*stormRad) - (rand.nextDouble()*stormRad), storm.getLayerHeight() - 60 + (rand.nextDouble() * 40.0F), storm.pos.posZ + (rand.nextDouble()*stormRad) - (rand.nextDouble()*stormRad));
 					if (tryPos.distanceSq(playerAdjPos) < maxRenderDistance) {
 						if (storm.stormType == 1 && storm.pos.distanceSq(tryPos) > 350.0D || storm.stormType == 0)
 						if (storm.getAvoidAngleIfTerrainAtOrAheadOfPosition(storm.getAngle(), tryPos) == 0) {
@@ -366,7 +409,7 @@ public class NormalStormRenderer extends AbstractWeatherRenderer
 										}									
 							}
 							particle.rotationPitch = Maths.random(70.0F, 110.0F);
-							particle.setScale(1250.0F * sizeCloudMult);
+							particle.setScale(550.0F * sizeCloudMult);
 							listParticlesMeso.add(particle);
 							}
 						}
@@ -566,11 +609,11 @@ public class NormalStormRenderer extends AbstractWeatherRenderer
 	@Override
 	public void onParticleLimitRefresh(WeatherManagerClient manager, int newParticleLimit)
 	{
-		particleLimitCloud = (int) (newParticleLimit * 0.05F);
+		particleLimitCloud = (int) (newParticleLimit * 0.1F);
 		particleLimitGround = (int) (newParticleLimit * 0.25F);
 		particleLimitRain = (int) (newParticleLimit * 0.1F);
 		particleLimitFunnel = (int) (newParticleLimit * 0.5F);
-		particleLimitMeso = (int) (newParticleLimit * 0.1F);
+		particleLimitMeso = (int) (newParticleLimit * 0.15F);
 	}
 	
 	@Override

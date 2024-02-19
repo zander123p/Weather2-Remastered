@@ -28,6 +28,7 @@ public class ItemRegistry
 	public static final Item thermometer = new ItemSensor(1);
 	public static final Item hygrometer = new ItemSensor(2);
 	public static final Item anemometer = new ItemSensor(3);
+	public static final Item dewalyser = new ItemSensor(4);
 	public static final Item radio = new ItemPocketSand();
 	
 	public static final Item itemMotor = new Item();
@@ -65,6 +66,8 @@ public class ItemRegistry
 		add("handheld_thermometer", thermometer);
 		add("handheld_hygrometer", hygrometer);
 		add("handheld_anemometer", anemometer);
+		
+		add("handheld_dewalyser", dewalyser);
 		
 		add("motor", itemMotor);
 		add("speaker", itemSpeaker);

@@ -11,6 +11,8 @@ import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockSnow;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -899,11 +901,46 @@ public class WeatherUtilBlock
 		return !(block instanceof BlockAir || material.isLiquid() || block instanceof BlockRepairingBlock) && (material.isSolid() || block instanceof BlockBush);
 	}
 	
-	public static boolean checkResistance(StormObject storm, String blockID)
+	public static boolean checkResistance(StormObject storm, World world, BlockPos pos, IBlockState state)
 	{
-		ConfigList list = WeatherAPI.getWRList();		
-		float resistance = list.exists(blockID) ? (float) list.get(blockID) / 9.657718F : -1.0F;
-		return resistance > -1.0F && storm.windSpeed >= resistance;
+		ConfigList list = WeatherAPI.getWRList();
+		float hardness = state.getBlock().getExplosionResistance(new EntityCreeper(world));
+		
+		for (int i = 0; i < 6; i++) {
+			BlockPos exPos = pos;
+			switch(i) {
+				case 0:
+					exPos = exPos.north();
+					break;
+				case 1:
+					exPos = exPos.east();
+					break;
+				case 2:
+					exPos = exPos.south();
+					break;
+				case 3:
+					exPos = exPos.west();
+					break;
+				case 4:
+					exPos = exPos.up();
+					break;
+				case 5:
+					exPos = exPos.down();
+					break;
+			}
+			IBlockState neighbourState = world.getBlockState(exPos);
+			if (neighbourState != null) {
+				float neighbourHardness = neighbourState.getBlock().getExplosionResistance(new EntityCreeper(world)) * 1.5f;
+				hardness += neighbourHardness / ((Maths.chance(.1))? 2 : 1);
+//				Weather2.info("Found Block: " + neighbourState.getBlock().getLocalizedName() + " Adding " + neighbourHardness + " to total hardness.");
+			}
+		}
+		
+		hardness *= 1.5f;
+//		Weather2.info("Block: " + state.getBlock().getLocalizedName() + " Hardness: " + hardness);
+//		Weather2.info("Storm: " + storm.getTypeName() + "Wind Speed: " + storm.windSpeed);
+		
+		return hardness > -1.0F && storm.windSpeed >= hardness;
 	}
 	
 	/**

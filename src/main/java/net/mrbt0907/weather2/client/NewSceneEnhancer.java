@@ -176,7 +176,7 @@ public class NewSceneEnhancer implements Runnable
 	{
 		if (cachedSystem != null)
 		{
-			float max = 0.5F;
+			float max = 0.15F;
 			if (cachedSystem instanceof SandstormObject)
 			{
 				fogDensity = (float) ((1.0D - Math.min(cachedSystemDistance / 300.0D, 1.0D)) * max * ConfigParticle.fog_mult);

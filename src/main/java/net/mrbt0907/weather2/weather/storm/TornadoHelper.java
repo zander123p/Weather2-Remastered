@@ -5,6 +5,7 @@ import java.util.*;
 import CoroUtil.block.TileEntityRepairingBlock;
 import CoroUtil.util.UtilMining;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.INpc;
@@ -16,6 +17,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.mrbt0907.weather2.Weather2;
@@ -81,6 +83,7 @@ public class TornadoHelper
 					}
 					else
 					{
+//						snapshot.state.getBlockHardness(world, snapshot.pos);
 						util.setBlockState(world, snapshot.pos.getX(), snapshot.pos.getY(), snapshot.pos.getZ(), AIR, snapshot.state);
 						EntityMovingBlock entity = new EntityMovingBlock(world, snapshot.pos.getX(), snapshot.pos.getY(), snapshot.pos.getZ(), snapshot.state, snapshot.storm);
 						entity.motionX += (world.rand.nextDouble() - world.rand.nextDouble()) * 1.0D;
@@ -120,6 +123,70 @@ public class TornadoHelper
 		}
 	}
 	
+	private float getChunkBlockDensity(World world, Chunk chunk) {
+		float density = 0;
+		int lowestHeight = chunk.getLowestHeight();
+		int heighestY = 0;
+		
+		BlockPos lowestBlock = new BlockPos(0,256,0);
+		BlockPos heighestBlock = new BlockPos(0,0,0);
+		
+		int seaLevel = world.getSeaLevel();
+		
+		for (int x = 0; x <= 16; x++) {
+			for (int z = 0; z <= 16; z++) {
+				
+				int cX = chunk.getPos().getXStart() + x;
+				int cZ = chunk.getPos().getZStart() + z;
+				
+				int heightmapHeight = chunk.getHeight(new BlockPos(cX, 0, cZ));
+				
+				if (lowestBlock.getY() > heightmapHeight && heightmapHeight >= seaLevel) {
+					lowestBlock = new BlockPos(cX, heightmapHeight-1, cZ);
+				}
+				
+				if (heighestBlock.getY() < heightmapHeight) {
+					heighestBlock = new BlockPos(cX, heightmapHeight-1, cZ);
+				}
+				
+				Weather2.info("Heightmap height of (" + cX + ", " + cZ + ") is: " + heightmapHeight);
+			}
+		}
+		
+		Weather2.info("");
+		Weather2.info("Lowest height of (" + chunk.x + ", " + chunk.z+ ") is: " + lowestBlock.getY() + " at (" + lowestBlock.getX() + "," + lowestBlock.getY() + "," + lowestBlock.getZ() + ")");
+		Weather2.info("Heighest height of (" + chunk.x + ", " + chunk.z+ ") is: " + heighestBlock.getY() + " at (" + heighestBlock.getX() + "," + heighestBlock.getY() + "," + heighestBlock.getZ() + ")");
+		
+		int blockCount = 0;
+		for (int y = lowestBlock.getY(); y <= heighestBlock.getY(); y++) {
+			for (int x = 0; x < 16; x++) {
+				for (int z = 0; z < 16; z++) {
+					IBlockState state = chunk.getBlockState(x, y, z);
+					
+					if (state.getBlock() instanceof BlockAir) {
+						if (!chunk.canSeeSky(new BlockPos(x,y,z))) {
+							blockCount++;
+						}
+					}
+					
+//					Weather2.info("Counting block: " + state.getBlock().getLocalizedName());
+				}
+			}
+		}
+		
+		Weather2.info("");
+		Weather2.info("");
+		Weather2.info("Total blocks in tornado chunk area: " + blockCount);
+		
+		density = blockCount / 256f;
+		
+		Weather2.info("");
+		Weather2.info("");
+		Weather2.info("Returning a density of: " + density);
+				
+		return density;
+	}
+	
 	public void tick(World world)
 	{
 		if (storm == null)
@@ -142,13 +209,15 @@ public class TornadoHelper
 			ChunkUtils util = Weather2.getChunkUtil(world);
 			if (ConfigGrab.grab_blocks && world.getTotalWorldTime() % (ConfigGrab.grab_process_delay > 0 ? ConfigGrab.grab_process_delay : 1) == 0)
 			{
+//				float chunkDesnsity = getChunkBlockDensity(world, world.getChunk(new BlockPos(storm.pos.posX, storm.pos.posY, storm.pos.posZ)));
+				
 				int x = 0, z = 0, grabbed = 0, replaced = 0;
 				
 				for (int y = 0; shouldContinue && y < storm.pos.posY && y < 256; y++)
 				{
 					loopAmount = (int) (5.0F + (y * 0.25F) + storm.funnelSize);
 					loopSize = size * 0.25D + y * 0.25D;
-						
+					
 					for (int i = 0; shouldContinue && i < loopAmount; i++)
 					{
 						x = (int)(storm.pos_funnel_base.posX + Maths.random(-loopSize, loopSize));
@@ -233,7 +302,8 @@ public class TornadoHelper
 		{
 			String id = state.getBlock().getRegistryName().toString();
 			
-			if (ConfigGrab.enable_grab_list && WeatherAPI.getGrabList().exists(id) || !ConfigGrab.enable_grab_list && !ConfigGrab.enable_replace_list)
+//			if (ConfigGrab.enable_grab_list && WeatherAPI.getGrabList().exists(id) || !ConfigGrab.enable_grab_list && !ConfigGrab.enable_replace_list)
+			if (true)
 			{
 				if (ConfigGrab.enable_repair_block_mode)
 				{
@@ -250,7 +320,7 @@ public class TornadoHelper
 				}
 				else
 				{
-					if ((ConfigGrab.enable_list_sharing && Maths.chance(50) || !ConfigGrab.enable_list_sharing) && (ConfigGrab.grab_list_strength_match && WeatherUtilBlock.checkResistance(storm, id) || !ConfigGrab.grab_list_strength_match))
+					if ((ConfigGrab.enable_list_sharing && Maths.chance(50) || !ConfigGrab.enable_list_sharing) && (ConfigGrab.grab_list_strength_match && WeatherUtilBlock.checkResistance(storm, world, pos, state) || !ConfigGrab.grab_list_strength_match))
 					{
 						snapshots.add(new BlockReplaceSnapshot(storm, null, state, pos));
 						return true;
@@ -271,7 +341,7 @@ public class TornadoHelper
 			
 			if (shouldReplace)
 			{
-				if ((ConfigGrab.replace_list_strength_matches && WeatherUtilBlock.checkResistance(storm, id) || !ConfigGrab.replace_list_strength_matches))
+				if ((ConfigGrab.replace_list_strength_matches && WeatherUtilBlock.checkResistance(storm, world, pos, state) || !ConfigGrab.replace_list_strength_matches))
 				{
 					putToCache(world, 1, true);
 					snapshots.add(new BlockReplaceSnapshot(storm, Block.getBlockFromName((String) list[Maths.random(0, list.length - 1)]).getDefaultState(), state, pos));

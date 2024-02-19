@@ -115,24 +115,33 @@ public class WeatherManagerServer extends WeatherManager
 						if (dewpoint > 10) continue;
 						
 						// 6:1 - Rain:Storm chance = 25%
-						boolean isStorm = Maths.chance(0.25d);
-						
-						if (isStorm) {
+						// TODO: Add a 10%? chance for clouds instead of rain/storm
+						if (Maths.chance(.2)) {
 							spawn = front.createNaturalStorm();
 							if (spawn != null) {
 								spawned = true;
 								PacketWeatherObject.create(dim, spawn);
 							}
-							if (((StormObject)spawn) != null) {
-								if (!((StormObject)spawn).shouldBuildHumidity) {
-									((StormObject)spawn).initRealStorm();
-								}
-							}
 						} else {
-							if (spawn != null) {
-								spawned = true;
-								PacketWeatherObject.create(dim, spawn);
-								spawn.setStage(Stage.RAIN.getStage());
+							boolean isStorm = Maths.chance(0.25d);
+							
+							if (isStorm) {
+								spawn = front.createNaturalStorm();
+								if (spawn != null) {
+									spawned = true;
+									PacketWeatherObject.create(dim, spawn);
+								}
+								if (((StormObject)spawn) != null) {
+									if (!((StormObject)spawn).shouldBuildHumidity) {
+										((StormObject)spawn).initRealStorm();
+									}
+								}
+							} else {
+								if (spawn != null) {
+									spawned = true;
+									PacketWeatherObject.create(dim, spawn);
+									spawn.setStage(Stage.RAIN.getStage());
+								}
 							}
 						}
 						
