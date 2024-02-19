@@ -22,6 +22,7 @@ import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.mrbt0907.weather2.Weather2;
 import net.mrbt0907.weather2.api.weather.IWeatherRain;
 import net.mrbt0907.weather2.api.weather.IWeatherStaged;
+import net.mrbt0907.weather2.api.weather.WeatherEnum.Stage;
 import net.mrbt0907.weather2.config.ConfigFront;
 import net.mrbt0907.weather2.config.ConfigMisc;
 import net.mrbt0907.weather2.config.ConfigParticle;
@@ -36,6 +37,7 @@ import net.mrbt0907.weather2.network.packets.PacketWeatherObject;
 import net.mrbt0907.weather2.network.packets.PacketWind;
 import net.mrbt0907.weather2.util.Maths;
 import net.mrbt0907.weather2.util.Maths.Vec3;
+import net.mrbt0907.weather2.util.WeatherUtil;
 import net.mrbt0907.weather2.util.WeatherUtilBlock;
 import net.mrbt0907.weather2.util.WeatherUtilEntity;
 import net.mrbt0907.weather2.weather.WeatherManager;
@@ -99,15 +101,84 @@ public class WeatherManagerServer extends WeatherManager
 				}
 				else
 				{
-					if(!front.equals(globalFront) && spawnInFront && canSpawnWeather(1))
-					{
+					
+					// Cold Front
+					if (front.type == 1) {
+						// Only run for non global fronts and if we're spawning a storm
+						if (front.equals(globalFront)) continue;
+						if (!Maths.chance(ConfigFront.chance_to_spawn_storm_in_front * 0.01d)) continue;
+						
+						// Check dewpoint of less than 10F
+						float dewpoint = WeatherUtil.getDewpoint(world, front.pos.toBlockPos());
+						if (dewpoint > 10) continue;
+						
+						// 6:1 - Rain:Storm chance = 25%
+						boolean isStorm = Maths.chance(0.25d);
+						
+						if (isStorm) {
+							spawn = front.createNaturalStorm();
+							if (spawn != null) {
+								spawned = true;
+								PacketWeatherObject.create(dim, spawn);
+							}
+							if (((StormObject)spawn) != null) {
+								if (!((StormObject)spawn).shouldBuildHumidity) {
+									((StormObject)spawn).initRealStorm();
+								}
+							}
+						} else {
+							if (spawn != null) {
+								spawned = true;
+								PacketWeatherObject.create(dim, spawn);
+								spawn.setStage(Stage.RAIN.getStage());
+							}
+						}
+						
+					// Warm Front
+					} else if (front.type == 2) {
+						// Only run for non global fronts and if we're spawning a storm
+						if (front.equals(globalFront)) continue;
+						if (!Maths.chance(ConfigFront.chance_to_spawn_storm_in_front * 0.01d)) continue;
+
+						// Check dewpoint of less than 10F
+						float dewpoint = WeatherUtil.getDewpoint(world, front.pos.toBlockPos());
+						if (dewpoint > 10) continue;
+						
 						spawn = front.createNaturalStorm();
-						if (spawn != null)
-						{
+						if (spawn != null) {
 							spawned = true;
 							PacketWeatherObject.create(dim, spawn);
 						}
+						
+					// Stationary Front
+					} else if (front.type == 0) {
+						// Only run for non global fronts and if we're spawning a storm
+						if (front.equals(globalFront)) continue;
+						if (!Maths.chance(Math.max(ConfigFront.chance_to_spawn_storm_in_front, ConfigFront.chance_to_spawn_storm_in_front + .2d) * 0.01d)) continue;
+						
+						spawn = front.createNaturalStorm();
+						if (spawn != null) {
+							spawned = true;
+							PacketWeatherObject.create(dim, spawn);
+							
+							if (((StormObject)spawn) != null) {
+								if (!((StormObject)spawn).shouldBuildHumidity) {
+									((StormObject)spawn).initRealStorm();
+								}
+							}
+						}
+						
 					}
+					
+//					if(!front.equals(globalFront) && spawnInFront && canSpawnWeather(1))
+//					{
+//						spawn = front.createNaturalStorm();
+//						if (spawn != null)
+//						{
+//							spawned = true;
+//							PacketWeatherObject.create(dim, spawn);
+//						}
+//					}
 					if (ticks % 40 == 0)
 						PacketFrontObject.update(dim, front);
 				}

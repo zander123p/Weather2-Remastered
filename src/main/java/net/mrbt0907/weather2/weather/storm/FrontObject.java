@@ -68,7 +68,7 @@ public class FrontObject implements IWeatherDetectable
 		float vecX = (float) -Maths.fastSin(Math.toRadians(angle));
 		float vecZ = (float) Maths.fastCos(Math.toRadians(angle));
 		float speed = (manager.windManager.windSpeed * 0.1F) + 0.02F;
-		motion = new Vec3(vecX * speed, 0.0D, vecZ * speed);
+		float speedMult = 1;
 		
 		if (pos == null)
 		{
@@ -79,13 +79,23 @@ public class FrontObject implements IWeatherDetectable
 		{
 			maxStorms = Maths.random(1, 35);
 			temperature = WeatherUtil.getTemperature(world, pos.toBlockPos());
-			humidity = WeatherUtil.getTemperature(world, pos.toBlockPos());
+			humidity = WeatherUtil.getHumidity(world, pos.toBlockPos());
 			pressure = WeatherUtil.getPressure(world, pos.toBlockPos());
-			if (temperature > 0.5 || Maths.chance(25))
+			
+			float tempMin = Math.min(temperature, -30);
+			float tempMax = Math.max(tempMin, 30);
+			
+			speedMult = (0.25f + (tempMax - 30f) * (1.25f - 0.25f) / (-30 - 30));
+			
+			if (temperature > 0.5 || Maths.chance(25)) {
 				type = 1;
-			else
+			} else {
 				type = 2;
+			}
+			
 		}
+		speed *= speedMult;
+		motion = new Vec3(vecX * speed, 0.0D, vecZ * speed);
 		
 		frontMultiplier = Maths.random(0.5F, 2.0F);
 		nbt = new NBTTagCompound();
@@ -125,15 +135,20 @@ public class FrontObject implements IWeatherDetectable
 			}
 			else
 			{
-				float mult = (type == 0 ? 0.25F : type == 1 ? 1.25F : 1.0F) * frontMultiplier;
-				angle = CoroUtilMisc.adjVal(angle, manager.windManager.windAngle, 0.001F * (float)ConfigFront.angle_change_mult * mult);
+				float tempMin = Math.min(temperature, -5);
+				float tempMax = Math.max(tempMin, 80);
+				
+				float speedMult = (0.25f + (tempMax - 80f) * (1.25f - 0.25f) / (-5 - 80)) * frontMultiplier;
+
+//				float mult = (type == 0 ? 0.25F : type == 1 ? 1.25F : 1.0F) * frontMultiplier;
+				angle = CoroUtilMisc.adjVal(angle, manager.windManager.windAngle, 0.001F * (float)ConfigFront.angle_change_mult * speedMult);
 				
 				float vecX = (float) -Maths.fastSin(Math.toRadians(angle));
 				float vecZ = (float) Maths.fastCos(Math.toRadians(angle));
 				float cloudSpeed = 0.2F;
 				float speed = ((manager.windManager.windSpeed * cloudSpeed) + (type == 1 ? 0.2F : 0.02F)) * (type == 0 ? 0.1F : 1.0F);
-				motion.posX = CoroUtilMisc.adjVal((float)motion.posX, vecX * speed, (float)ConfigFront.speed_change_mult * mult);
-				motion.posZ = CoroUtilMisc.adjVal((float)motion.posZ, vecZ * speed, (float)ConfigFront.speed_change_mult * mult);
+				motion.posX = CoroUtilMisc.adjVal((float)motion.posX, vecX * speed, (float)ConfigFront.speed_change_mult * speedMult);
+				motion.posZ = CoroUtilMisc.adjVal((float)motion.posZ, vecZ * speed, (float)ConfigFront.speed_change_mult * speedMult);
 		
 				pos.posX += motion.posX;
 				pos.posZ += motion.posZ;
@@ -243,7 +258,7 @@ public class FrontObject implements IWeatherDetectable
 					storm.pos = new Vec3(target.posX + Maths.random(-ConfigSimulation.max_storm_spawning_distance, ConfigSimulation.max_storm_spawning_distance), storm.getLayerHeight(), target.posZ + Maths.random(-ConfigSimulation.max_storm_spawning_distance, ConfigSimulation.max_storm_spawning_distance));
 			}
 			else
-				storm.pos = new Vec3(pos.posX + Maths.random(-size, size), storm.getLayerHeight(), pos.posZ + Maths.random(-size, size));
+				storm.pos = new Vec3(pos.posX + Maths.random(-size, size)/2, storm.getLayerHeight(), pos.posZ + Maths.random(-size, size)/2);
 			
 			if (layer == 0 && Maths.chance(ConfigStorm.storm_spawn_chance * 0.01D))
 				storm.initRealStorm();
