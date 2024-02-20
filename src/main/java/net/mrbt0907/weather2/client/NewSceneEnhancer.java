@@ -3,6 +3,7 @@ package net.mrbt0907.weather2.client;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import CoroUtil.api.weather.IWindHandler;
@@ -175,7 +176,7 @@ public class NewSceneEnhancer implements Runnable
 	{
 		if (cachedSystem != null)
 		{
-			float max = 0.1F;
+			float max = 0.5F;
 			if (cachedSystem instanceof SandstormObject)
 			{
 				fogDensity = (float) ((1.0D - Math.min(cachedSystemDistance / 300.0D, 1.0D)) * max * ConfigParticle.fog_mult);
@@ -209,13 +210,30 @@ public class NewSceneEnhancer implements Runnable
 				MC.world.getWorldInfo().setThundering(false);
 				return;
 			}
-
-			overcastTarget = ((stage == 0 ? 0.0F :stage == 1 ? 0.35F : stage == 2 ? 0.6F : 1.0F) - (float) Maths.clamp((cachedSystemDistance - size) / cachedSystem.size, 0.0F, 1.0F));
+			
+			Map<WeatherObject, Integer> systems = ClientTickHandler.weatherManager.getWeatherSystems(new Vec3(MC.player.posX, MC.player.posY, MC.player.posZ), renderDistance, 0, Integer.MAX_VALUE, WeatherEnum.Type.CLOUD);
+			Vec3 playerpos = new Vec3(MC.player.posX, MC.player.posY, MC.player.posZ);
+			float inf = 0;
+			for (Map.Entry<WeatherObject, Integer> entry : systems.entrySet()) {
+				WeatherObject storm = entry.getKey();
+				Integer _stage = entry.getValue();
+				
+				float stormDistFactor = (float) Maths.clamp((storm.pos.distanceSq(playerpos) - size) / storm.size, 0.0F, 1F);
+				inf += (_stage == 0 ? 0.0F :_stage == 1 ? 0.35F : _stage == 2 ? 0.6F : 1.0F) - stormDistFactor;
+			}
+			
+			inf /= systems.size();
+			
+//			overcastTarget = ((stage == 0 ? 0.0F :stage == 1 ? 0.35F : stage == 2 ? 0.6F : 1.0F) - (float) Maths.clamp((cachedSystemDistance - size) / cachedSystem.size, 0.0F, 1.0F));
+			inf = Maths.clamp(inf, 0, 10);
+			
+			overcastTarget = inf;
+			overcastTargetMult = inf / 2;
 			
 			if (cachedSystem != null && cachedSystem instanceof StormObject)
 			{
 				StormObject storm = (StormObject) cachedSystem;
-				overcastTargetMult = (storm.isViolent ? 1.0F : stage >= 2 ? 0.4F : 0.0F);
+				overcastTargetMult = (storm.isViolent ? 4.0F : stage >= 2 ? 1.6F : 0.0F);
 			}
 
 			if (system.hasDownfall())
