@@ -29,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.mrbt0907.weather2.Weather2;
 import net.mrbt0907.weather2.api.WeatherAPI;
-import net.mrbt0907.weather2.api.weather.AbstractStormRenderer;
+import net.mrbt0907.weather2.api.weather.AbstractWeatherRenderer;
 import net.mrbt0907.weather2.api.weather.IWeatherLayered;
 import net.mrbt0907.weather2.api.weather.IWeatherRain;
 import net.mrbt0907.weather2.api.weather.WeatherEnum;
@@ -48,7 +48,7 @@ import net.mrbt0907.weather2.weather.WindManager;
 public class StormObject extends WeatherObject implements IWeatherRain, IWeatherLayered
 {
 	//-----Rendering-----\\
-	public AbstractStormRenderer particleRenderer;
+	public AbstractWeatherRenderer particleRenderer;
 	public ResourceLocation particleRendererId;
 	public float angle = 0.0F;
 	
@@ -239,13 +239,11 @@ public class StormObject extends WeatherObject implements IWeatherRain, IWeather
 	public void tick()
 	{
 		super.tick();
-		manager.getWorld().profiler.startSection("stormObjectTick");
 		//adjust posGround to be pos with the ground Y pos for convinient usage
 		posGround = new Vec3(pos.posX, pos.posY, pos.posZ);
 		posGround.posY = currentTopYBlock;
 		if (manager.getWorld().isRemote)
 		{
-			manager.getWorld().profiler.startSection("clientTick");
 			if (!WeatherUtil.isPaused())
 			{
 				tickClient();
@@ -255,24 +253,17 @@ public class StormObject extends WeatherObject implements IWeatherRain, IWeather
 
 				tickMovementClient();
 			}
-			manager.getWorld().profiler.endSection();
 		}
 		else
 		{
-			manager.getWorld().profiler.startSection("serverTick");
 			
 			if (isDeadly())
 				tornadoHelper.tick(manager.getWorld());
 
-			manager.getWorld().profiler.startSection("tickMovement");
 			tickMovement();
-			manager.getWorld().profiler.endStartSection("tickWeather");
 			tickWeatherEvents();
-			manager.getWorld().profiler.endStartSection("tickProgression");
 			tickProgressionNormal();
-			manager.getWorld().profiler.endStartSection("tickSnowFall");
 			tickSnowFall();
-			manager.getWorld().profiler.endSection();
 		}
 		
 		if (layer == 0)
@@ -310,7 +301,6 @@ public class StormObject extends WeatherObject implements IWeatherRain, IWeather
 					pos_funnel_base.posY = pos.posY;
 				}
 		}
-		manager.getWorld().profiler.endSection();
 	}
 	
 	public void tickMovement()
